@@ -23,7 +23,7 @@ public class EmailService {
 	private JavaMailSender javaMailSender;
 
 	public Email sendEmail(Email email) {
-		
+
 		email.setSendDateEmail(LocalDateTime.now());
 		email.setEmailFrom("ajudaquicom@hotmail.com");
 		try {
@@ -39,15 +39,14 @@ public class EmailService {
 
 		} catch (MailException e) {
 			email.setStatusEmail(StatusEmail.ERROR);
-
 		}
 		return emailRepository.save(email);
 
 	}
-	
+
 	public List<Email> emailById(Long userId) {
-	return emailRepository.emailByUser(userId);
-	
+		return emailRepository.emailByUser(userId);
+
 	}
 
 }
