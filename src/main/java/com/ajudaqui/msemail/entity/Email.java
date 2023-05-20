@@ -77,6 +77,13 @@ public class Email {
 	public void setUser_id(Long user_id) {
 		this.user_id = user_id;
 	}
+	@Override
+	public String toString() {
+		return "Email [id=" + id + ", user_id=" + user_id + ", emailFrom=" + emailFrom + ", emailTo=" + emailTo
+				+ ", subject=" + subject + ", text=" + text + ", sendDateEmail=" + sendDateEmail + ", statusEmail="
+				+ statusEmail + "]";
+	}
+	
 	
 	
 	

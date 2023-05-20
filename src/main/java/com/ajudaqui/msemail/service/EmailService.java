@@ -8,6 +8,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -29,7 +30,11 @@ public class EmailService {
 	@Autowired
 	private JavaMailSender javaMailSender;
 
-	private String sender="ajudaquicom@hotmail.com";
+	@Autowired
+	Environment environment;
+
+	private String sender = "ajudaquicom@hotmail.com";
+
 	public Email sendEmail(Email email) {
 
 		email.setSendDateEmail(LocalDateTime.now());
@@ -43,14 +48,19 @@ public class EmailService {
 			message.setText(email.getText());
 
 			javaMailSender.send(message);
+
 			email.setStatusEmail(StatusEmail.SENT);
 
 		} catch (MailException e) {
+			System.err.println(e.getMessage());
 			email.setStatusEmail(StatusEmail.ERROR);
+			new RuntimeException(e.getMessage());
 		}
+
 		return emailRepository.save(email);
 
 	}
+
 	public String sendingEmailFile(Email email, MultipartFile file) throws IOException {
 
 		MimeMessage message = javaMailSender.createMimeMessage();
@@ -66,9 +76,9 @@ public class EmailService {
 			helper.setText(email.getText(), true); // "Corpo da mensagem"
 
 			byte[] bytes = file.getBytes();
-			
+
 			ByteArrayResource resource = new ByteArrayResource(bytes);
-			
+
 			helper.addAttachment(file.getOriginalFilename(), resource);
 
 			javaMailSender.send(message);
@@ -83,6 +93,7 @@ public class EmailService {
 	}
 
 	public List<Email> emailById(Long userId) {
+
 		return emailRepository.emailByUser(userId);
 
 	}
